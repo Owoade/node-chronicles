@@ -1,7 +1,9 @@
-import fs from "fs";
+import fs from "node:fs";
 import { open } from "fs/promises"
 import path from "path";
 import { Stream } from "stream";
+import fsPromises from "fs/promises"
+import { watch } from "node:fs/promises"
 
 
 const file = await open('text.txt', 'r');
@@ -59,3 +61,26 @@ catch(e){
     console.error(e);
     
 }
+
+//  This is reads a file, if no encoding is specified a buffer is returned else a string
+const data = fs.readFileSync('book.txt', {
+    encoding: 'utf8'
+});
+
+//
+const folders = fs.opendirSync("./");
+
+const stats = fs.statSync('book.txt');
+
+console.log(stats);
+
+(async function watch_file(){
+
+    const watcher = watch('book.txt');
+    
+    for await ( const _ of watcher );
+
+    console.log(_);
+
+})()
+
