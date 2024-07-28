@@ -8,18 +8,24 @@ import { watch } from "node:fs/promises"
 
 const file = await open('text.txt', 'r');
 
-const stream = file.createReadStream({});
+const stream = file.createReadStream({
+    emitClose: true,
+});
 
 const writable_stream = new Stream.Writable({
+    emitClose: true,
     write(chunk){
-        this.cork()
+        console.log(stream.bytesRead)
+        // this.cork()
         console.log(`----------------a new data -------`)
         // console.log(chunk.toString())
     },
 })
 
 
+
 writable_stream.on('pipe', ()=> console.log('piped'))
+writable_stream.on('close', ()=> console.log('pipe closed'))
 stream.on('error', (e)=> console.log( error ))
 
 stream.pipe(writable_stream)
@@ -27,13 +33,17 @@ stream.pipe(writable_stream)
 stream.on('close', ()=> console.log('stream closed'))
 stream.on('end', ()=> console.log('stream ended'))
 
+// file.close(); // triggers the readable stream close event
+
+
+
 
 try {
 
     // Create a foltder recursively;
     const dir_path = new URL('./folder/child-folder/', import.meta.url) // use __dirname in cjs
 
-    fs.mkdirSync(dir_path);
+    // fs.mkdirSync(dir_path);
 
 }
 catch(e){
@@ -74,13 +84,17 @@ const stats = fs.statSync('book.txt');
 
 console.log(stats);
 
-(async function watch_file(){
+// (async function watch_file(){
 
-    const watcher = watch('book.txt');
+//     const watcher = watch('book.txt');
     
-    for await ( const _ of watcher );
+//     for await ( const _ of watcher );
 
-    console.log(_);
+//     console.log(_);
 
-})()
+// })()
+
+
+// Create symlink 
+// fs.symlinkSync('book.txt', 'link.txt');
 
