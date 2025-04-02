@@ -53,4 +53,28 @@ const uint16_arr = new Uint16Array(
 // this changes the buffer value as well cos they both have the value in memory
 uint16_arr[1] = 40;
 
-console.log(string2_buffer, uint16_arr)
+console.log(string2_buffer, uint16_arr);
+
+for( const val of base64_buffer ){
+    console.log(val)
+}
+
+
+const buf = Buffer.alloc(11, 'aGVsbG8gd29ybGQ=', 'base64');
+
+console.log(buf.toString('base64'));
+
+// buffer.alloc vs buffer.allocUnsafe
+// (SLOW) This allocates the size of the buffer in mempry and initializazes each allocated space with 0
+const safely_allocated_buffer = Buffer.alloc(5, 10);
+
+// (FAST) allocates the size of the buffer in mempry but doesn't initialize the buffer with a value because available values maybe previously alllocated data
+const unsafe_buffer = Buffer.allocUnsafe(5, 10);
+
+for( const value of safely_allocated_buffer ){
+    console.log(value) 
+}
+
+for( const value of unsafe_buffer ){
+    console.log(value)
+}
